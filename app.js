@@ -35,10 +35,9 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
             })();
             ArticleComponent = (function () {
                 function ArticleComponent() {
-                    this.article = new Article('Angular 2', 'http://angular.io', 10);
                 }
                 ArticleComponent.prototype.voteUp = function () {
-                    this.articles.voteUp();
+                    this.article.voteUp();
                     return false;
                 };
                 ArticleComponent.prototype.voteDown = function () {
@@ -48,6 +47,7 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
                 ArticleComponent = __decorate([
                     core_1.Component({
                         selector: 'reddit-article',
+                        inputs: ['article'],
                         host: {
                             class: 'row'
                         },
@@ -58,15 +58,23 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
             })();
             RedditApp = (function () {
                 function RedditApp() {
+                    this.articles = [
+                        new Article('Angular 2', 'http://angular.io', 3),
+                        new Article('Fullstack', 'http://fullstack.io', 2),
+                        new Article('Angular Homepage', 'http://angular.io', 1),
+                    ];
                 }
                 RedditApp.prototype.addArticle = function (title, link) {
                     console.log("Adding article title: " + title.value + " and link: " + link.value);
+                    this.articles.push(new Article(title.value, link.value, 0));
+                    title.value = '';
+                    link.value = '';
                 };
                 RedditApp = __decorate([
                     core_1.Component({
                         selector: 'reddit',
                         directives: [ArticleComponent],
-                        template: "\n    <form class=\"ui large form segment\">\n      <h3 class=\"ui header\">Add a Link</h3>\n<div class=\"field\">\n<label for=\"title\">Title:</label> <input name=\"title\" #newtitle>\n      </div>\n      <div class=\"field\">\n<label for=\"link\">Link:</label>\n        <input name=\"link\" #newlink>\n      </div>\n      <button (click)=\"addArticle(newtitle,newlink)\"\n      \tclass=\"ui positive right floated button\">\n      \tsubmit link\n      </button>\n</form> \n<div class=\"ui grid posts\">\n  <reddit-article>\n  </reddit-article>\n</div>"
+                        template: "\n    <form class=\"ui large form segment\">\n      <h3 class=\"ui header\">Add a Link</h3>\n<div class=\"field\">\n<label for=\"title\">Title:</label> <input name=\"title\" #newtitle>\n      </div>\n      <div class=\"field\">\n<label for=\"link\">Link:</label>\n        <input name=\"link\" #newlink>\n      </div>\n      <button (click)=\"addArticle(newtitle,newlink)\"\n      \tclass=\"ui positive right floated button\">\n      \tsubmit link\n      </button>\n</form> \n<div class=\"ui grid posts\">\n  <reddit-article *ngFor=\"#article of articles\"\n  \t\t[article] = \"article\">\n  </reddit-article>\n</div>"
                     }), 
                     __metadata('design:paramtypes', [])
                 ], RedditApp);
