@@ -9,7 +9,7 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var browser_1, core_1;
-    var ArticleComponent, RedditApp;
+    var Article, ArticleComponent, RedditApp;
     return {
         setters:[
             function (browser_1_1) {
@@ -19,18 +19,30 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
                 core_1 = core_1_1;
             }],
         execute: function() {
+            Article = (function () {
+                function Article(title, link, votes) {
+                    this.title = title;
+                    this.link = link;
+                    this.votes = votes || 0;
+                }
+                Article.prototype.voteUp = function () {
+                    this.votes += 1;
+                };
+                Article.prototype.voteDown = function () {
+                    this.votes -= 1;
+                };
+                return Article;
+            })();
             ArticleComponent = (function () {
                 function ArticleComponent() {
-                    this.title = 'Angular 2';
-                    this.link = 'http://angular.io';
-                    this.votes = 10;
+                    this.article = new Article('Angular 2', 'http://angular.io', 10);
                 }
                 ArticleComponent.prototype.voteUp = function () {
-                    this.votes += 1;
+                    this.articles.voteUp();
                     return false;
                 };
                 ArticleComponent.prototype.voteDown = function () {
-                    this.votes -= 1;
+                    this.article.voteDown();
                     return false;
                 };
                 ArticleComponent = __decorate([
@@ -39,7 +51,7 @@ System.register(['angular2/platform/browser', 'angular2/core'], function(exports
                         host: {
                             class: 'row'
                         },
-                        template: "\n<div class=\"four wide column center aligned votes\"> <div class=\"ui statistic\">\n<div class=\"value\"> {{ votes }}\n</div>\n<div class=\"label\">\nPoints\n        </div>\n      </div>\n</div>\n<div class=\"twelve wide column\">\n<a class=\"ui large header\" href=\"{{ link }}\"> {{ title }}\n</a>\n<ul class=\"ui big horizontal list voters\">\n<li class=\"item\">\n<a href (click)=\"voteUp()\">\n<i class=\"arrow up icon\"></i> upvote\n</a> </li>\n<li class=\"item\">\n<a href (click)=\"voteDown()\">\n<i class=\"arrow down icon\"></i>\ndownvote\n</a> </li>\n</ul> </div>\n" }), 
+                        template: "\n<div class=\"four wide column center aligned votes\"> <div class=\"ui statistic\">\n<div class=\"value\"> {{ article.votes }}\n</div>\n<div class=\"label\">\nPoints\n        </div>\n      </div>\n</div>\n<div class=\"twelve wide column\">\n<a class=\"ui large header\" href=\"{{ article.link }}\"> {{ article.title }}\n</a>\n<ul class=\"ui big horizontal list voters\">\n<li class=\"item\">\n<a href (click)=\"voteUp()\">\n<i class=\"arrow up icon\"></i> upvote\n</a> </li>\n<li class=\"item\">\n<a href (click)=\"voteDown()\">\n<i class=\"arrow down icon\"></i>\ndownvote\n</a> </li>\n</ul> </div>\n" }), 
                     __metadata('design:paramtypes', [])
                 ], ArticleComponent);
                 return ArticleComponent;
